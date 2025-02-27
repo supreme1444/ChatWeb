@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: >
+      sh -c "alembic revision --autogenerate -m 'Initial migration' || true && alembic upgrade head"
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: 111
+      POSTGRES_PASSWORD: 111
+      POSTGRES_DB: TestMesChat
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
