@@ -67,3 +67,17 @@ async def create_chat_group(group_chat: schemas.GroupCreate, db: AsyncSession):
         creator_id=new_group.creator_id,
         members=group_chat.members
     )
+
+
+async def crud_get_history(db: AsyncSession, limit, chat_id: int, offset: int,):
+    await services_cheak_chat_id(chat_id,db)
+    output = (
+        select(models.Message)
+        .where(models.Message.chat_id == chat_id)
+        .order_by(asc(models.Message.timestamp))
+        .offset(offset)
+        .limit(limit)
+    )
+    result = await db.execute(output)
+    history_items = result.scalars().all()
+    return history_items
