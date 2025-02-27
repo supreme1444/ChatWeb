@@ -39,3 +39,12 @@ async def add_chat_group(group_chat: schemas.GroupCreate, db: AsyncSession = Dep
                          user: models.User = Depends(auth.get_current_user)):
     return await create_chat_group(group_chat, db)
 
+
+@user_router_user.get("/history", response_model=schemas.MessageResponce)
+async def get_history(chat_id: int,
+                      db: AsyncSession = Depends(get_db),
+                      user: models.User = Depends(auth.get_current_user),
+                      limit: int = Query(10, gt=0),offset: int = Query(0, ge=0)):
+    messages = await crud_get_history(db, limit, chat_id, offset)
+    response = schemas.MessageResponce(text=[message.text for message in messages])
+    return response
