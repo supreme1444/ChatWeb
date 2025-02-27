@@ -53,3 +53,8 @@ class Group(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class MessageResponce(BaseModel):
+    text: List
+
