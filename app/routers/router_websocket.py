@@ -75,7 +75,7 @@ async def authenticate_user(websocket: WebSocket, db: AsyncSession, token: str):
 
 
 async def check_access(db: AsyncSession, chat_id: int, current_user):
-    chat = await db.execute(select(Chat).where(Chat.id == chat_id))  # Здесь замените User на Chat
+    chat = await db.execute(select(Chat).where(Chat.id == chat_id))  
     chat_record = chat.scalar()
 
     if chat_record is None:
